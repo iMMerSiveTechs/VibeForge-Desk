@@ -43,6 +43,11 @@ import DraggableElement from '@/components/canvas/DraggableElement';
 import DraggablePinCard from '@/components/canvas/DraggablePinCard';
 import ElementPalette from '@/components/canvas/ElementPalette';
 import ItemPickerModal from '@/components/canvas/ItemPickerModal';
+import ColorPicker from '@/components/canvas/ColorPicker';
+import StrokeWidthSelector from '@/components/canvas/StrokeWidthSelector';
+import Minimap from '@/components/canvas/Minimap';
+import AlignmentGuides from '@/components/canvas/AlignmentGuides';
+import { GridSnapToggle, snapToGrid } from '@/components/canvas/GridSnap';
 import {
   SCREEN_WIDTH,
   SCREEN_HEIGHT,
@@ -93,6 +98,18 @@ export default function CanvasScreen() {
   const [activeTool, setActiveTool] = useState<DrawTool>('pan');
   const [activeDrawStroke, setActiveDrawStroke] = useState<ActiveStrokeState | null>(null);
 
+  // Color & stroke width state
+  const [strokeColor, setStrokeColor] = useState('#FFFFFF');
+  const [strokeWidth, setStrokeWidth] = useState(3);
+  const [showColorPicker, setShowColorPicker] = useState(false);
+  const [showWidthPicker, setShowWidthPicker] = useState(false);
+
+  // Grid snap state
+  const [gridSnapEnabled, setGridSnapEnabled] = useState(false);
+
+  // Currently dragging element (for alignment guides)
+  const [draggingElement, setDraggingElement] = useState<{ x: number; y: number; w: number; h: number } | null>(null);
+
   // Arrow creation ref
   const arrowStartRef = useRef<{ x: number; y: number } | null>(null);
 
@@ -140,23 +157,23 @@ export default function CanvasScreen() {
     [],
   );
 
-  // Drawing callbacks
+  // Drawing callbacks — use dynamic color/width from state
   const updateActiveStroke = useCallback(
     (points: Array<{ x: number; y: number }>) => {
       if (activeTool === 'pan' || activeTool === 'arrow' || activeTool === 'eraser') return;
-      const color = activeTool === 'highlighter' ? '#FFEC5C' : '#FFFFFF';
-      const width = activeTool === 'highlighter' ? 16 : 3;
+      const color = activeTool === 'highlighter' ? '#FFEC5C' : strokeColor;
+      const width = activeTool === 'highlighter' ? strokeWidth * 4 : strokeWidth;
       setActiveDrawStroke({ tool: activeTool as 'pen' | 'highlighter', color, width, points: [...points] });
     },
-    [activeTool],
+    [activeTool, strokeColor, strokeWidth],
   );
 
   const commitActiveStroke = useCallback(
     (points: Array<{ x: number; y: number }>) => {
       setActiveDrawStroke(null);
       if (points.length < 2) return;
-      const color = activeTool === 'highlighter' ? '#FFEC5C' : '#FFFFFF';
-      const width = activeTool === 'highlighter' ? 16 : 3;
+      const color = activeTool === 'highlighter' ? '#FFEC5C' : strokeColor;
+      const width = activeTool === 'highlighter' ? strokeWidth * 4 : strokeWidth;
       const stroke: PinboardStroke = {
         id: uid(),
         tool: activeTool as 'pen' | 'highlighter',
@@ -167,7 +184,7 @@ export default function CanvasScreen() {
       };
       addStroke(stroke);
     },
-    [activeTool, addStroke],
+    [activeTool, addStroke, strokeColor, strokeWidth],
   );
 
   const commitArrow = useCallback(
@@ -590,6 +607,33 @@ export default function CanvasScreen() {
 
   const isEmpty = validPins.length === 0 && safeElements.length === 0;
 
+  // Minimap navigation
+  const handleMinimapNavigate = useCallback(
+    (x: number, y: number) => {
+      viewportX.value = x;
+      viewportY.value = y;
+      saveViewport(viewportScale.value, x, y);
+    },
+    [viewportX, viewportY, viewportScale, saveViewport],
+  );
+
+  // Alignment guide data for other elements
+  const otherElementRects = useMemo(() => {
+    const rects: Array<{ id: string; x: number; y: number; w: number; h: number }> = [];
+    for (const pin of validPins) {
+      rects.push({ id: pin.id, x: pin.x, y: pin.y, w: pin.w, h: pin.h });
+    }
+    for (const el of safeElements) {
+      if (el.type !== 'arrow') {
+        rects.push({ id: el.id, x: el.x, y: el.y, w: el.w, h: el.h });
+      }
+    }
+    return rects;
+  }, [validPins, safeElements]);
+
+  // Show drawing tools UI when pen/highlighter/arrow active
+  const showDrawingTools = activeTool === 'pen' || activeTool === 'highlighter' || activeTool === 'arrow';
+
   const paletteOptions: PaletteOption[] = [
     {
       label: 'Sticky Note',
@@ -766,10 +810,62 @@ export default function CanvasScreen() {
         </Animated.View>
       </View>
 
+      {/* Alignment Guides overlay (inside canvas area) */}
+      <AlignmentGuides
+        activeElement={draggingElement}
+        otherElements={otherElementRects}
+      />
+
+      {/* Minimap */}
+      <Minimap
+        pins={validPins.map((p) => ({ x: p.x, y: p.y, w: p.w, h: p.h }))}
+        elements={safeElements.filter((e) => e.type !== 'arrow').map((e) => ({ x: e.x, y: e.y, w: e.w, h: e.h, type: e.type }))}
+        viewportX={viewportX.value}
+        viewportY={viewportY.value}
+        viewportScale={viewportScale.value}
+        canvasSize={CANVAS_SIZE}
+        screenWidth={SCREEN_WIDTH}
+        screenHeight={SCREEN_HEIGHT}
+        onNavigate={handleMinimapNavigate}
+      />
+
+      {/* Grid Snap Toggle */}
+      <View style={{ position: 'absolute', top: 100, right: 12, zIndex: 200 }}>
+        <GridSnapToggle enabled={gridSnapEnabled} onToggle={setGridSnapEnabled} />
+      </View>
+
+      {/* Color Picker (visible when drawing tools active) */}
+      <View style={{ position: 'absolute', top: 52, left: 12, right: 12, zIndex: 300 }}>
+        <ColorPicker
+          selectedColor={strokeColor}
+          onSelect={setStrokeColor}
+          visible={showDrawingTools && showColorPicker}
+        />
+      </View>
+
+      {/* Stroke Width Selector */}
+      <View style={{ position: 'absolute', top: 100, left: 12, zIndex: 300 }}>
+        <StrokeWidthSelector
+          selectedWidth={strokeWidth}
+          onSelect={setStrokeWidth}
+          visible={showDrawingTools && showWidthPicker}
+        />
+      </View>
+
       {/* Toolbar */}
       <CanvasToolbar
         activeTool={activeTool}
-        onChangeTool={setActiveTool}
+        onChangeTool={(tool) => {
+          setActiveTool(tool);
+          // Auto-show color/width pickers when switching to drawing tools
+          if (tool === 'pen' || tool === 'highlighter' || tool === 'arrow') {
+            setShowColorPicker(true);
+            setShowWidthPicker(true);
+          } else {
+            setShowColorPicker(false);
+            setShowWidthPicker(false);
+          }
+        }}
         onUndo={undoInk}
         onRedo={redoInk}
         onClear={clearInk}

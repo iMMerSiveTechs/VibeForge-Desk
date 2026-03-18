@@ -1,6 +1,25 @@
 /**
  * Design tokens for VibeForge Desk themes.
  * Each theme provides: desk, surface, paper, ink, border, accent, shadows
+ *
+ * AUDIT NOTE (theme list mismatch with themes.ts):
+ *
+ * Themes in themes.ts but NOT in tokens.ts (added as stubs below):
+ *   - recycled-kraft
+ *   - cyber-graphite
+ *   - vintage-typewriter
+ *   - space-white
+ *   - oak-workshop
+ *   - carbon-fiber
+ *   - vibeforge-brand
+ *
+ * Themes in tokens.ts but NOT in themes.ts:
+ *   - ash-ember
+ *   - ocean-quartz
+ *   - mono-graphite
+ *   - cherry-blossom-office
+ *   - copper-circuit
+ *   - alpine-slate
  */
 
 export interface ThemeTokens {
@@ -179,6 +198,71 @@ export const themes: Record<string, ThemeTokens> = {
     accent: '#7cb8d4',
     shadows: '#1a2a3a',
   },
+
+  // Stubs for themes present in themes.ts but previously missing here
+  'recycled-kraft': {
+    desk: '#d4a574',
+    surface: '#e0b080',
+    paper: '#f0e8d0',
+    ink: '#3a3a3a',
+    border: '#8b6f47',
+    accent: '#e74c3c',
+    shadows: '#6a5a48',
+  },
+  'cyber-graphite': {
+    desk: '#1a1a1a',
+    surface: '#2a2a2a',
+    paper: '#e8e8e8',
+    ink: '#e8e8e8',
+    border: '#3a3a3a',
+    accent: '#00d9ff',
+    shadows: '#000000',
+  },
+  'vintage-typewriter': {
+    desk: '#1a1612',
+    surface: '#2a2418',
+    paper: '#f5f1e8',
+    ink: '#f0e8d0',
+    border: '#3a3228',
+    accent: '#d84c2a',
+    shadows: '#0f0d0a',
+  },
+  'space-white': {
+    desk: '#f8f8fa',
+    surface: '#f0f0f5',
+    paper: '#fafbfc',
+    ink: '#2a2a3a',
+    border: '#d8d8e0',
+    accent: '#4a5ae8',
+    shadows: '#7a7a8a',
+  },
+  'oak-workshop': {
+    desk: '#4a3a2a',
+    surface: '#5a4a38',
+    paper: '#f0e8d0',
+    ink: '#e8dcc8',
+    border: '#6a5a48',
+    accent: '#c8a876',
+    shadows: '#2a1a0a',
+  },
+  'carbon-fiber': {
+    desk: '#1a1a1c',
+    surface: '#282829',
+    paper: '#f0f0f2',
+    ink: '#e8e8ea',
+    border: '#3a3a3c',
+    accent: '#e84c3a',
+    shadows: '#000000',
+  },
+  'vibeforge-brand': {
+    desk: '#0d0d12',
+    surface: '#1a1a24',
+    paper: '#eeeef8',
+    ink: '#f5f5ff',
+    border: '#1e1e2c',
+    accent: '#ff3a5c',
+    shadows: '#000000',
+  },
 };
 
 export const themeNames: Record<string, string> = {
@@ -200,4 +284,11 @@ export const themeNames: Record<string, string> = {
   'cherry-blossom-office': 'Cherry Blossom Office',
   'copper-circuit': 'Copper Circuit',
   'alpine-slate': 'Alpine Slate',
+  'recycled-kraft': 'Recycled Kraft',
+  'cyber-graphite': 'Cyber Graphite',
+  'vintage-typewriter': 'Vintage Typewriter',
+  'space-white': 'Space White',
+  'oak-workshop': 'Oak Workshop',
+  'carbon-fiber': 'Carbon Fiber',
+  'vibeforge-brand': 'VibeForge Brand',
 };

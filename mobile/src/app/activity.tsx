@@ -9,8 +9,6 @@ export default function ActivityScreen() {
   const theme = useTheme();
   const activity = useDeskStore(useShallow((s) => s.activity));
 
-  console.log('[Activity] activity count:', activity.length, activity.slice(0, 2));
-
   const formatTime = (ts: string) => {
     const d = new Date(ts);
     return d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });

@@ -8,6 +8,7 @@ import { View, Text } from 'react-native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { ThemeProvider } from '@/lib/theme/ThemeContext';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { PackTokensProvider } from '@/lib/theme/PackTokensContext';
 import { SubscriptionProvider } from '@/lib/subscription/SubscriptionContext';
 
@@ -176,10 +177,10 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <GestureHandlerRootView style={{ flex: 1 }}>
-        <>
+        <ErrorBoundary>
           <StatusBar style="light" />
           <RootLayoutNav />
-        </>
+        </ErrorBoundary>
       </GestureHandlerRootView>
     </QueryClientProvider>
   );
