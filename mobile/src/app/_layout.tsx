@@ -101,7 +101,7 @@ function RootLayoutNav() {
             }}
           />
           <Stack.Screen
-            name="pinboard"
+            name="canvas"
             options={{ headerShown: false, presentation: 'card' }}
           />
           <Stack.Screen

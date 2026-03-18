@@ -332,10 +332,10 @@ export default function CommandBarScreen() {
       action: () => createAndOpen('goal'),
     },
     {
-      id: 'pinboard',
-      label: 'Open Pinboard',
+      id: 'canvas',
+      label: 'Open Canvas',
       icon: <MapPin size={15} color="rgba(255,255,255,0.7)" />,
-      action: () => navigate('/pinboard'),
+      action: () => navigate('/canvas'),
     },
     {
       id: 'studio',

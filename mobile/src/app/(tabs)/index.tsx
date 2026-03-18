@@ -79,7 +79,7 @@ const ALL_SHELF_OPTIONS: ShelfItem[] = [
   { id: 'journal', label: 'Journal', icon: 'BookOpen' },
   { id: 'goal', label: 'Goals', icon: 'Target' },
   { id: 'studio', label: 'Studio', icon: 'Palette' },
-  { id: 'pinboard', label: 'Pinboard', icon: 'MapPin' },
+  { id: 'canvas', label: 'Canvas', icon: 'MapPin' },
   { id: 'activity', label: 'Activity', icon: 'Clock' },
   { id: 'calendar', label: 'Calendar', icon: 'CalendarDays' },
   { id: 'workspace', label: 'Workspace', icon: 'FolderOpen' },
@@ -88,7 +88,7 @@ const ALL_SHELF_OPTIONS: ShelfItem[] = [
 function shelfItemRoute(id: string): string {
   switch (id) {
     case 'studio': return '/(tabs)/studio';
-    case 'pinboard': return '/pinboard';
+    case 'canvas': return '/canvas';
     case 'activity': return '/activity';
     case 'calendar': return '/calendar';
     case 'workspace': return '/vault-os';
@@ -576,10 +576,10 @@ function StackCard({ kind, onPress }: { kind: CoreKind; onPress: () => void }) {
 }
 
 // ---------------------------------------------------------------------------
-// Pinboard Hero Card (first/largest card on desk)
+// Canvas Hero Card (first/largest card on desk)
 // ---------------------------------------------------------------------------
 
-function PinboardHeroCard() {
+function CanvasHeroCard() {
   const theme = useTheme();
   const pack = usePackTokens();
   const pins = useDeskStore((s) => s.pinboard.pins);
@@ -629,7 +629,7 @@ function PinboardHeroCard() {
     <Pressable
       onPress={() => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-        deferredNavigate('/pinboard');
+        deferredNavigate('/canvas');
       }}
       style={({ pressed }) => ({
         marginTop: 8,
@@ -688,7 +688,7 @@ function PinboardHeroCard() {
                 color: theme.brandGreen, marginBottom: 2,
               }}
             >
-              PINBOARD
+              CANVAS
             </Text>
             <Text
               style={{
@@ -697,7 +697,7 @@ function PinboardHeroCard() {
                 letterSpacing: -0.3,
               }}
             >
-              Pinboard
+              Canvas
             </Text>
           </View>
           <View
@@ -772,7 +772,7 @@ function PinboardHeroCard() {
             }}
           >
             <Text style={{ fontSize: 13, color: theme.muted, textAlign: 'center' }}>
-              No pins yet. Tap to open the Pinboard.
+              No pins yet. Tap to open the Canvas.
             </Text>
           </View>
         )}
@@ -1264,7 +1264,7 @@ export default function DeskScreen() {
           </Pressable>
         </View>
 
-        {/* Pinboard Hero Card — first main content */}
+        {/* Canvas Hero Card — first main content */}
         <Text
           style={{
             fontSize: 11,
@@ -1277,7 +1277,7 @@ export default function DeskScreen() {
         >
           PINBOARD
         </Text>
-        <PinboardHeroCard />
+        <CanvasHeroCard />
 
         {/* Scan to Desk — kept imperative (Alert callback navigation) */}
         {showScanBar ? (

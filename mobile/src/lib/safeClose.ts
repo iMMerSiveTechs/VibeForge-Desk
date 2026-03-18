@@ -22,7 +22,7 @@ const DISMISS_SCREENS = new Set([
  * These use router.back() normally.
  */
 const BACK_SCREENS = new Set([
-  'pinboard',
+  'canvas',
   'vault',
   'journal',
   'goals',

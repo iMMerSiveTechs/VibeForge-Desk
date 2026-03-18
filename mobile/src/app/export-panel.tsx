@@ -793,7 +793,7 @@ export default function ExportPanelScreen() {
                 .vfdesk Archive
               </Text>
               <Text style={{ fontSize: 12, color: theme.muted, lineHeight: 17 }}>
-                Complete vault snapshot with all items, theme, pinboard, and shelf config
+                Complete vault snapshot with all items, theme, canvas, and shelf config
               </Text>
               <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 6 }}>
                 <View

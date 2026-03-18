@@ -1485,7 +1485,7 @@ export default function EditorScreen() {
               onPress={() => {
                 safeDismiss(router);
                 setTimeout(() => {
-                  router.push('/pinboard');
+                  router.push('/canvas');
                 }, 300);
               }}
               hitSlop={8}
@@ -1498,13 +1498,13 @@ export default function EditorScreen() {
         </Animated.View>
       ) : null}
 
-      {/* Pinboard backlink (persistent, shown when pinned) */}
+      {/* Canvas backlink (persistent, shown when pinned) */}
       {isPinnedToBoard && !pinFeedback ? (
         <Pressable
           onPress={() => {
             safeDismiss(router);
             setTimeout(() => {
-              router.push('/pinboard');
+              router.push('/canvas');
             }, 300);
           }}
           style={{

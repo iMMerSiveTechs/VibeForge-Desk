@@ -62,7 +62,7 @@ const ALL_SHELF_OPTIONS: ShelfItem[] = [
   { id: 'journal', label: 'Journal', icon: 'BookOpen' },
   { id: 'goal', label: 'Goals', icon: 'Target' },
   { id: 'studio', label: 'Studio', icon: 'Palette' },
-  { id: 'pinboard', label: 'Pinboard', icon: 'MapPin' },
+  { id: 'canvas', label: 'Canvas', icon: 'MapPin' },
   { id: 'activity', label: 'Activity', icon: 'Clock' },
   { id: 'calendar', label: 'Calendar', icon: 'CalendarDays' },
   { id: 'workspace', label: 'Workspace', icon: 'FolderOpen' },
@@ -329,7 +329,7 @@ export default function DeskSetupScreen() {
     item.title = title;
     upsertItem(item);
 
-    // Add it to pinboard
+    // Add it to canvas
     addPin({
       id: item.id + '_pin',
       itemId: item.id,
@@ -432,7 +432,7 @@ export default function DeskSetupScreen() {
                   lineHeight: 20,
                 }}
               >
-                Give your first pinboard item a title.{'\n'}You can add more from the Pinboard.
+                Give your first canvas item a title.{'\n'}You can add more from the Canvas.
               </Text>
             </View>
 
@@ -477,7 +477,7 @@ export default function DeskSetupScreen() {
               })}
             >
               <Text style={{ fontSize: 17, fontWeight: '800', color: '#000', letterSpacing: 0.3 }}>
-                Add to Pinboard
+                Add to Canvas
               </Text>
             </Pressable>
 
@@ -694,7 +694,7 @@ export default function DeskSetupScreen() {
                 </Text>
               ) : layout === 'expanded' ? (
                 <Text style={{ fontSize: 14, color: TEXT_MUTED, lineHeight: 21 }}>
-                  Full desk view with all sections: scan bar, shelf, stack cards, studio, pinboard, vault, journal, goals, and calendar. Everything at a glance.
+                  Full desk view with all sections: scan bar, shelf, stack cards, studio, canvas, vault, journal, goals, and calendar. Everything at a glance.
                 </Text>
               ) : (
                 <Text style={{ fontSize: 14, color: TEXT_MUTED, lineHeight: 21 }}>
