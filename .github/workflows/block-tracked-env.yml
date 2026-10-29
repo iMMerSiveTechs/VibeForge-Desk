@@ -3,7 +3,7 @@ name: Block tracked environment files
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: ["**"]
   workflow_dispatch:
 
 permissions:
